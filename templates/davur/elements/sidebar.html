@@ -1,0 +1,57 @@
+{% load static %}
+<div class="deznav">
+    <div class="deznav-scroll">
+        <ul class="metismenu" id="menu">
+
+            {% if perms.users.view_customuser or perms.auth.view_group or perms.auth.view_permission %}
+                {% if perms.users.view_customuser or perms.users.change_customuser or perms.users.add_customuser or perms.users.delete_customuser %}
+                    <li>
+                        <a href="{% url 'davur:users' %}">
+                            <i class="flaticon-381-user ai-icon" aria-expanded="false"></i>
+                            <span class="nav-text">Users</span>
+                        </a>
+                    </li>
+                
+
+                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                            <i class="flaticon-381-home"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{% url 'davur:dashboard' %}">Dashboard</a></li>
+                            <li><a href="{% url 'davur:page-analytics' %}">Analytics</a></li>
+                            <li><a href="{% url 'davur:page-review' %}">Review</a></li>
+                            <li><a href="{% url 'davur:page-general-customers' %}">Customers</a></li>
+                            
+                        </ul>
+                    </li>
+
+                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                            <i class="flaticon-381-list"></i>
+                            <span class="nav-text">Shop</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{% url 'davur:ecom-product-list' %}">Product List</a></li>
+                            <li><a href="{% url 'davur:ecom-product-order' %}">Order List</a></li>
+                            <li><a href="{% url 'frontend:front-upload-item' %}">Upload Product</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+
+
+            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-user-9"></i>
+                    <span class="nav-text">Order Food</span>
+                   
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{% url 'frontend:table' %}">Choose Table</a></li>
+                    <li><a href="{% url 'davur:order-status' %}">Online Order Status</a></li>
+                    
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

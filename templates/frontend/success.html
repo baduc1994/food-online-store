@@ -1,0 +1,34 @@
+{% extends 'frontend/elements/layouts/base.html' %}
+{% load static %}
+{% block additional_css %}
+{% endblock %}
+{% block success %}
+
+   {% comment %} <body>
+        <h1>Paid Order Successfully</h1>
+        <button>
+            <a href = "{% url 'frontend:table' %}">Comback to place new order</a>
+        </button>
+    </body> {% endcomment %}
+<head>
+{% include 'davur/elements/nav-header.html' %}
+{% include 'davur/elements/header.html' %}
+</head>
+<body>
+<div style="margin-top:150px" class="jumbotron text-center">
+  <h1 class="display-3">Paid Order Successfully !</h1>
+  {% comment %} <p class="lead"><strong>Please check your email</strong> for further instructions on how to complete your account setup.</p> {% endcomment %}
+  <hr>
+  {% comment %} <p>
+    Having trouble? <a href="https://bootstrapcreative.com/">Contact us</a>
+  </p> {% endcomment %}
+  <p class="lead">
+    <a class="btn btn-primary btn-sm" href="{% url 'frontend:table' %}" role="button">Back To Place Order</a>
+  </p>
+  <p class="lead">
+    <a class="btn btn-primary btn-sm" href="{% url 'frontend:review' customer_name.id %}" role="button">Write Review</a>
+  </p>
+</div>
+</body>
+
+{% endblock success %}

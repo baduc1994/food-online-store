@@ -1,0 +1,136 @@
+{% extends 'davur/elements/layouts/admin.html' %}
+{% load static %}
+
+
+{% block additional_css %}
+{% endblock %}
+
+
+
+{% block content %}
+
+  
+        <!--Filter-->
+        <div class="dropdown custom-dropdown d-flex justify-content-end">
+            <div class="btn btn-sm btn-primary light d-flex align-items-center svg-btn" data-bs-toggle="dropdown">
+                <div class="text-start ms-3">
+                    <span class="d-block fs-16">Filter Customer</span>
+                    {% if a == 'total_spent' %}
+                    <small class="d-block fs-13">Total Spent</small>
+                    {% elif a == 'buy_quantity' %}
+                    <small class="d-block fs-13">Buy Quantity</small>
+
+                    {% endif %}
+                </div>
+                <i class="fa fa-angle-down scale5 ms-3"></i>
+            </div>
+            <div class="dropdown-menu dropdown-menu-right text-start">
+                <a class="dropdown-item" href="{% url 'davur:page-general-customers' %}">Newest</a>
+                <a class="dropdown-item" href="{% url 'davur:filter-customers' a='total_spent' %}">Total Spent</a>
+                <a class="dropdown-item" href="{% url 'davur:filter-customers' a='buy_quantity' %}">Buy Quantity</a>
+                
+            </div>
+        </div>
+
+        <div class="row page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">Customer Lists</li>
+                
+            </ol>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="align-middle">
+                                            <div class="form-check custom-checkbox">
+                                                <input type="checkbox" class="form-check-input" id="checkAll">
+                                                <label class="form-check-label" for="checkAll"></label>
+                                            </div>
+                                        </th>
+                                        <th class="align-middle">Customer Name</th>
+                                        <th class="align-middle">Total Buy</th>
+                                        <th class="align-middle pe-7">Total Spent</th>
+                                        <th class="align-middle text-end">Join Date</th>
+                                        <th class="align-middle text-end">Last Order Date</th>
+                                        <th class="no-sort"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders">
+                                    {% for customer in customers %}
+                                    <tr class="btn-reveal-trigger">
+                                        <td class="py-2">
+                                            <div class="form-check custom-checkbox checkbox-success">
+                                                <input type="checkbox" class="form-check-input" id="checkbox">
+                                                <label class="form-check-label" for="checkbox"></label>
+                                            </div>
+                                        </td>
+                                        <td class="py-2">{{customer.name}}</td>
+                                        <td class="py-2">{{customer.buy_qty}}</td>
+                                        <td class="py-2">${{customer.total_spent}}</td>
+                                        <td class="py-2">{{customer.join_date}}</td>
+                                        {% if customer.buy_qty > 1 %}
+                                        <td class="py-2">{{customer.last_order_date}}</td>
+                                        {% else %}
+                                        <td></td>
+                                        {% endif %}
+                                        
+                                        <td class="py-2 text-end">
+                                            <div class="dropdown text-sans-serif"><button class="btn btn-primary tp-btn-light sharp" type="button" id="order-dropdown-0" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg></span></button>
+                                                <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
+                                                    <div class="py-2 ">
+                                                        <a class="dropdown-item text-center" href="{% url 'davur:customer-detail' customer.id %}">Detail</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger text-center" href="{% url 'davur:delete-customer' customer.id %}">Delete</a>
+                                                        
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div style= "margin-left:50px; margin-top:10px" class="pagination">
+                                <span class="step-links">
+                                
+                                    {% if customers.has_previous %}
+                                        <a href="?page=1">&laquo; First</a>
+                                        <a href="?page={{ customers.previous_page_number }}">Previous</a>
+                                    {% endif %}
+
+                                    <span style="margin: 0 10px" class="current">
+                                        Page {{ customers.number }} of {{ customers.paginator.num_pages }}
+                                    </span>
+
+                                    {% if customers.has_next %}
+                                        
+                                        <a href="?page={{ customers.next_page_number }}">Next</a>
+                                        <a href="?page={{ customers.paginator.num_pages }}" >Last &raquo;</a>
+                                        
+                                    {% endif %}
+                            
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

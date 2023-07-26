@@ -1,0 +1,227 @@
+{% extends 'davur/elements/layouts/admin.html' %}
+{% load static %}
+
+
+{% block additional_css %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="form-head d-flex mb-3 mb-md-4 align-items-start">
+        <div class="me-auto d-none d-lg-block">
+            <h2 class="text-primary font-w600 mb-1">Reviews</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)" class="text-primary">Dashboard</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Customer Reviews</a></li>
+            </ol>
+        </div>
+        {% comment %} <div style="margin-right:50px">
+    
+            <h3>Filter By Star</h3>
+            <form class="d-inline-flex" method='post' action="{% url 'davur:filter-review' %}">
+            {% csrf_token %}
+                <select style= "border: 1px solid gray;" class ="form-select text-center" type='sumit' name='filter-rating'>
+                    <option value='all'>All</option>
+                    <option value='5'>5</option>
+                    <option value='4'>4</option>
+                    <option value='3'>3</option>
+                    <option value='2'>2</option>
+                    <option value='1'>1</option>
+                </select>
+                <button style="margin-left:10px" type='submit' class="btn btn-primary">Filter</button>
+            </form>
+        </div> {% endcomment %}
+        <div class="dropdown custom-dropdown">
+            <div class="btn btn-sm btn-primary light d-flex align-items-center svg-btn" data-bs-toggle="dropdown">
+                <div class="text-start ms-3">
+                    <span class="d-block fs-16">Filter By Star</span>
+                    <small class="d-block fs-13">All</small>
+                </div>
+                <i class="fa fa-angle-down scale5 ms-3"></i>
+            </div>
+            <div class="dropdown-menu dropdown-menu-right text-center">
+                <a class="dropdown-item" href="{% url 'davur:page-review' %}">All Stars</a>
+                <a class="dropdown-item" href="{% url 'davur:filter-review' id=5 %}">5 Stars</a>
+                <a class="dropdown-item" href="{% url 'davur:filter-review' id=4 %}">4 Stars</a>
+                <a class="dropdown-item" href="{% url 'davur:filter-review' id=3 %}">3 Stars</a>
+                <a class="dropdown-item" href="{% url 'davur:filter-review' id=2 %}">2 Stars</a>
+                <a class="dropdown-item" href="{% url 'davur:filter-review' id=1 %}">1 Star</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xl-9 col-xxl-8">
+            <div class="card">
+                <div class="card-header border-0 pb-0 d-sm-flex d-block">
+                    <div>
+                        <h4 class="card-title mb-1 fs-28 font-w600">Recent Review</h4>
+                        <p class="mb-0">Here is customer review about your restaurant </p>
+                    </div>
+                    
+                </div>
+                <!--Code here-->
+                {% for review in rating_core %}   
+                    <div class="card-body p-0 filterDiv 5-stars">
+                        <div class="media review-box d-flex">
+                            <div class="media-body">
+                                <h4 class="mt-0 mb-0 text-black">{{ review.customer.name }}</h4>
+                                <ul class="review-meta mb-3 d-block d-sm-flex align-items-center">
+                                    <li class="me-3"><small>{{ review.time }}</small></li>
+                                </ul>
+                                <p class="mb-3 text-secondary">{{ review.review_content }}</p>
+                            </div>
+                            <div class="media-footer align-self-center">
+                                <div class="star-review text-md-center">
+                                    <span class="text-secondary">{{ review.rating }}</span>
+                                    <i class=" fa fa-star {% if review.rating > 0 %} checked text-primary {% endif %}"></i>
+                                    <i class=" fa fa-star {% if review.rating > 1 %} checked text-primary {% endif %}"></i> 
+                                    <i class=" fa fa-star {% if review.rating > 2 %} checked text-primary {% endif %}"></i> 
+                                    <i class=" fa fa-star {% if review.rating > 3 %} checked text-primary {% endif %}"></i> 
+                                    <i class=" fa fa-star {% if review.rating > 4 %} checked text-primary {% endif %}"></i>     
+                                </div>
+                            </div>
+                        </div>           
+                    </div>
+                {% endfor %}
+                <div style= "margin-left:50px; margin-top:10px" class="pagination">
+                    <span class="step-links">
+                    
+                        {% if rating_core.has_previous %}
+                            <a href="?page=1">&laquo; First</a>
+                            <a href="?page={{ rating_core.previous_page_number }}">Previous</a>
+                        {% endif %}
+
+                        <span style="margin: 0 10px" class="current">
+                            Page {{ rating_core.number }} of {{ rating_core.paginator.num_pages }}
+                        </span>
+
+                        {% if rating_core.has_next %}
+                            
+                            <a href="?page={{ rating_core.next_page_number }}">Next</a>
+                            <a href="?page={{ rating_core.paginator.num_pages }}" >Last &raquo;</a>
+                            
+                        {% endif %}
+                    
+                    </span>
+                </div>
+                
+                
+                {% comment %} <div class="card-footer border-0 text-center py-4">
+                    <a href="javascript:void(0);" class="btn btn-primary">Read More <i class="fa fa-angle-double-down scale2 ms-2"></i></a>
+                </div>  {% endcomment %}
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-xl-3 col-xxl-4">
+            <div class="card bg-secondary h-auto sticky">
+                <div class="card-header border-0 pb-0 d-sm-flex d-block" style="display:flex !important">
+                    <div>
+                        <h3 class="card-title mb-1 text-white fs-28 font-w600">Rating Score</h3>
+                    </div>
+                    
+                </div>
+                <div class="card-footer border-0 text-center py-4 bg-warning">
+                    <div class="star-review text-md-center d-flex justify-content-center align-items-center">
+                        <span class="text-white fs-32 font-w600 me-3">{{avg}}</span>
+                        <i class="fa fa-star fs-22 mx-1 {% if avg > 0.5 %} checked text-white {% endif %}"></i>
+                        <i class="fa fa-star fs-22 mx-1 {% if avg > 1.5 %} checked text-white {% endif %}"></i>
+                        <i class="fa fa-star fs-22 mx-1 {% if avg > 2.5 %} checked text-white {% endif %}"></i>
+                        <i class="fa fa-star fs-22 mx-1 {% if avg > 3.5 %} checked text-white {% endif %}"></i>
+                        <i class="fa fa-star fs-22 mx-1 {% if avg > 4.5 %} checked text-white {% endif %}"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block additional_js %}
+<script>
+    function widgetCarousel()
+    {
+    
+        /*  testimonial one function by = owl.carousel.js */
+        jQuery('.widget-carousel').owlCarousel({
+            loop:false,
+            margin:30,
+            nav:true,
+            autoplay:true,
+            autoplaySpeed: 3000,
+            navSpeed: 3000,
+            paginationSpeed: 3000,
+            slideSpeed: 3000,
+            smartSpeed: 3000,
+            dots: false,
+            navText: ['<i class="fa fa-caret-left"></i>', '<i class="fa fa-caret-right"></i>'],
+            responsive:{
+                0:{
+                    items:1
+                },
+                
+                480:{
+                    items:1,
+                    stagePadding: 100
+                },			
+                767:{
+                    items:2,
+                },			
+                
+                1200:{
+                    items:3
+                },
+                1750:{
+                    items:4
+                }
+            }
+        })
+    }
+    function carouselReview(){
+        /*  testimonial one function by = owl.carousel.js */
+        jQuery('.testimonial-one').owlCarousel({
+            loop:true,
+            autoplay:true,
+            margin:0,
+            nav:false,
+            dots: false,
+            navText: [''],
+            responsive:{
+                0:{
+                    items:1
+                },
+                
+                480:{
+                    items:1
+                },			
+                
+                767:{
+                    items:1
+                },
+                1000:{
+                    items:1
+                },
+                1400:{
+                    items:1
+                }
+            }
+        })		
+        /*Custom Navigation work*/
+        jQuery('#next-slide').on('click', function(){
+           $('.testimonial-one').trigger('next.owl.carousel');
+        });
+
+        jQuery('#prev-slide').on('click', function(){
+           $('.testimonial-one').trigger('prev.owl.carousel');
+        });
+        /*Custom Navigation work*/
+    }
+    
+    jQuery(window).on('load',function(){
+        setTimeout(function(){
+            widgetCarousel();
+            carouselReview();
+        }, 1000); 
+    });
+</script>
+{% endblock %}

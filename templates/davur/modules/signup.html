@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    {% load static custom_tags widget_tweaks %}
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta name="keywords" content="" />
+	<meta name="author" content="" />
+	<meta name="robots" content="" />
+	<meta name="description" content="{{ dz_array.davur.davur_views.public.title }}" />
+	<meta property="og:title" content="{{ dz_array.davur.davur_views.public.title }}" />
+	<meta property="og:description" content="{{ dz_array.davur.davur_views.public.title }}" />
+	<meta property="og:image" content="{{ dz_array.davur.davur_views.public.social_image_url }}" />
+	<meta name="format-detection" content="telephone=no">
+    <title>{{ dz_array.davur.davur_views.public.title }}</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static dz_array.frontend.frontend_views.public.favicon %}">
+
+
+    {% for cssurl in dz_array.davur.davur_views.pagelevel.css|getdata:request.path %}
+    <link rel="stylesheet" href="{% static cssurl %}" >
+    {% endfor %}
+
+    {% for cssurl in dz_array.davur.davur_views.global.css %}
+    <link rel="stylesheet" href="{% static cssurl %}">
+    {% endfor %}
+    
+    {% block additional_css %}
+    {% endblock %}
+
+</head>
+
+<body class="h-100">
+    <div class="authincation h-100">
+        <div class="container h-100">
+            <div class="row justify-content-center h-100 align-items-center">
+                <div class="col-md-6">
+                    <div class="authincation-content">
+                        <div class="row no-gutters">
+                            <div class="col-xl-12">
+                                <div class="auth-form">
+									<div class="text-center mb-3">
+										<a href="{% url 'davur:index' %}"><img src="{% static 'davur/images/logo-full.png' %}" alt=""></a>
+									</div>
+                                    <h4 class="text-center mb-4">Sign up your account</h4>
+                                    {% include 'davur/elements/alert.html' %}
+                                    <form method="post">{% csrf_token %}
+                                        <div class="row">
+
+                                            <div class="mb-3">
+                                                <label class="mb-1">Email</label>
+                                                {{ form.email|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}
+
+                                                <div class="text-danger w-100 d-block mt-1">
+                                                    {{ form.email.errors }}
+                                                    </div>
+                                            
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                                <label class="mb-1">First Name</label>
+                                                {{ form.first_name|attr:"class:form-control"|attr:"placeholder:First Name"|attr:"type:text" }}   
+                                                <div class="text-danger w-100 d-block mt-1">
+                                                    {{ form.first_name.errors }}
+                                                    </div>
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label class="mb-1">Last Name</label>
+                                                {{ form.last_name|attr:"class:form-control"|attr:"placeholder:Last Name"|attr:"type:text" }}   
+                                                <div class="text-danger w-100 d-block mt-1">
+                                                    {{ form.last_name.errors }}
+                                                    </div>
+                                            </div>
+
+
+
+                                            <div class="mb-3">
+                                                <label class="mb-1">Password</label>
+                                                {{ form.password1|attr:"class:form-control"|attr:"placeholder:Password"|attr:"type:password" }}
+                                                <div class="text-danger w-100 d-block mt-1">
+                                                    {{ form.password1.errors }}
+                                                    </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="mb-1">Confirm Password</label>
+                                                {{ form.password2|attr:"class:form-control"|attr:"placeholder:Password"|attr:"type:password" }}
+                                                <div class="text-danger w-100 d-block mt-1">
+                                                    {{ form.password2.errors }}
+                                                    </div>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <button type="submit" class="btn btn-primary btn-block">Sign me up</button>
+                                            </div>
+                                        </div> 
+                                    </form>
+                                    <div class="new-account mt-3">
+                                        <p>Already have an account? <a class="text-primary" href="{% url 'davur:login' %}">Sign in</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--**********************************
+	Scripts
+***********************************-->
+<!-- Required vendors -->
+{% for jsurl in dz_array.davur.davur_views.global.js.top %}
+<script src="{% static jsurl %}"></script>
+{% endfor %}
+
+{% for jsurl in dz_array.davur.davur_views.pagelevel.js|getdata:request.path %}
+<script src="{% static jsurl %}"></script>
+{% endfor %}
+
+{% for jsurl in dz_array.davur.davur_views.global.js.bottom %}
+<script src="{% static jsurl %}"></script>
+{% endfor %}
+
+{% block additional_js %}
+{% endblock %}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

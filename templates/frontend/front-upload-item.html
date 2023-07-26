@@ -1,0 +1,107 @@
+{% extends 'davur/elements/layouts/admin.html' %}
+{% load static %}
+
+{% block additional_css %}
+{% endblock %}
+
+{% block content %}
+<head>
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin-top:150px;
+  
+  
+}
+</style>
+</head>
+
+
+<h2>Upload Product</h2>
+
+<div style="margin-bottom:100px"class="container">
+    
+    <form method='POST' action="" enctype='multipart/form-data'>
+    {% csrf_token %}
+        <div style='width:100%' class="form-group">
+            <label>Product Name</label><br>
+             {{ form.product_name }}
+        </div>
+        <div class="form-group">
+            <label style="margin-right:30px">Quantity</label>
+             {{ form.product_qty }}
+            <label style="margin: 0 30px;">Price ($)</label>
+             {{ form.product_price }}
+        </div>
+        
+        <div style='width:100%' class="form-group">
+            <label>Category</label><br>
+            {{form.category}}
+        </div>
+        <div style='width:100%' class="form-group">
+            <label >Description</label>
+            {{ form.description }}
+        </div>
+        <div style='margin-bottom:30px' class="form-group">
+            <label >Upload Image</label><br>
+            {{ form.product_image }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+    </form>
+    
+
+</div>
+
+
+{% endblock %}
+
+{% block additional_js %}
+
+<script>
+	(function($) {
+	 
+		var table = $('#example5').DataTable({
+			searching: false,
+			paging:true,
+			select: false,
+			//info: false,         
+			lengthChange:false 
+			
+		});
+		$('#example tbody').on('click', 'tr', function () {
+			var data = table.row( this ).data();
+			
+		});
+	   
+	})(jQuery);
+	</script>
+{% endblock %}

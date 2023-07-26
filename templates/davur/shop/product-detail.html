@@ -1,0 +1,92 @@
+{% extends 'davur/elements/layouts/admin.html' %}
+{% load static %}
+
+
+{% block additional_css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+
+        
+            
+            <h2><a href="{% url 'davur:ecom-product-list' %}">Back</a></h2>
+            <br>
+        </div>
+
+        <div class="row page-titles">
+            <h3 class="text-primary">Product Id : {{product.product_code}}</h3>
+            
+        </div>
+        
+                
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <h3>{{product.product_name}}</h3>
+                            
+                        </div>
+                        <div>
+                            <div>
+                                <label>Price : </label>
+                                {{product.product_price}}
+                            </div>
+                            <div>
+                                <label>Quantity : </label>
+                                {{product.product_qty }}
+                            </div>
+                            <div>
+                                <label>Category : </label>
+                                {{product.category}}
+                            </div>
+                            <div>
+                                <label>Buy quantity : </label>
+                                {{product.buy_qty}}
+                            </div>
+                            <div>
+                                <label>Product code : </label>
+                                {{product.product_code}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div style="margin: 5px 0 50px 0" class="container">
+                <button type="button" class="btn btn-danger col-2 mx-auto " data-bs-toggle="modal" data-bs-target="#myModal{{product.id}}">Delete</button>       
+            </div>
+            <!-- The Modal -->
+            <div class="modal" id="myModal{{product.id}}">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are you sure ?</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            <a href="{% url 'davur:delete-product' product.id %}" class="btn btn-primary">Delete</a>            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+{% endblock %}
+
+
+
+{% block additional_js %}
+{% endblock %}
+
+
+
+
+

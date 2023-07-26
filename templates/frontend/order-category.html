@@ -1,0 +1,256 @@
+{% extends 'frontend/elements/layouts/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+{% endblock %}
+
+{% block content %}
+{% include 'davur/elements/nav-header.html' %}
+{% include 'davur/elements/header.html' %}
+<div class="content-wrapper">
+    <!-- row -->
+    <div class="listcontent-area">
+        <aside class="cart-area  dz-scroll cart-page" id="cart_area">
+            <div class="" >
+                <div class="h-100">
+                    <div class="card rounded-0">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table text-black">
+                                    <thead>
+                                        <tr>
+                                            <th>ITEM</th>
+                                            <th>QNT.</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="overflow: auto; width: 150px">
+
+                                    
+                                    {% if nullitems %}
+                                    {% for nullitem in nullitems %} 
+                                        <tr>                   
+                                            <td><span class="font-w500">{{nullitem.product.product_name}}</span></td>
+                                            {% if nullitem.quantity > 1 %}
+                                            <td style="flex:1"><h6>Only {{ nullitem.quantity }} products available</h6></td>
+                                           <td></td>
+                                            {% elif nullitem.quantity == 1 %}
+                                            <td style="flex:1"><h6>Only {{ nullitem.quantity }} product available</h6></td>
+                                            <td></td>
+                                            {% else %}
+                                            <td style="flex:1"><h6>Out of stock</h6></td>
+                                            <td></td>
+                                            {% endif %} 
+                                        </tr>   
+                                    {% endfor %}
+                                    {% csrf_token %}
+                                    
+                                    <tr class="null-data">
+                                        <input type="hidden" value="{{ cart.id }}" class="cart_id">
+                                            <td>
+                                                <div>
+                                                    <button class="btn btn-danger delete-null-item remove" onClick="window.location.reload()">Remove</button>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                    </tr>
+                                    {% endif %}
+                                    
+
+
+
+                                    {% if items %}                                                                   
+                                    {% for item in items %}
+                                        <tr class="product-data2">
+                                            <td><span class="font-w500">{{item.product.product_name}}</span></td>
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{ cart.id }}" class="cart_id">
+                                            <input type="hidden" value="{{ item.product.id }}" class="prod_id">
+                                            
+                                            <td>
+                                                <div class="input-group text-center d-flex justify-content-end " style="width:145px; margin-right:0px">
+                                                    <button class = "input-group-text w-25 decrement-btn">-</button>
+                                                    <input style="height:45px" type ='text' name="quantity" class ="form-control qty-input text-center" value="{{item.quantity}}">
+                                                    <button  class = "input-group-text w-25 increment-btn">+</button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    <button style="margin-right:5px" class="btn btn-primary changeQuantity" onClick="window.location.reload()">Update</button>
+                                                    <button style="color:white" class="btn btn-danger delete-cart-item remove" onClick="window.location.reload()">X</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td><h6>Your Cart Is Empty</h6></td>
+                                    </tr>
+                                    {% endif %}
+                                    
+                                    
+                                      
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-order-footer">
+                        <div class="btn_box">
+                            <div class="row no-gutter mx-0">
+                                <a href="" id="home-counter-tab" class="btn btn-light btn-block col-6 m-0 rounded-0">Confirm</a>
+                                <a href="{% url 'frontend:table'  %}" id="home-counter-tab" class="btn btn-danger btn-block col-6 m-0 rounded-0">Back</a>
+                                <a href="{% url 'frontend:checkout' cart.id %}" id="place-order-tab" class="btn btn-primary btn-block col-6 m-0 rounded-0">Checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </aside>
+        <!--Place-An-Order-->    
+        <div class="row">
+                <!-- Search -->
+                <div style="margin:30px 500px 10px 20px; width: 300px" class="search-area style-1 mb-4">
+                    <form method = 'post' action = '{% url "frontend:search" %}'>
+                    
+                    {% csrf_token %}
+                    <input type="hidden" value="{{cart.id}}" name="id_cart"> 
+                    <input type="text" class="form-control" placeholder="Search here..." name="searched">
+                    <div style= "margin-top:10px" class="input-group-append">
+                        <button class=" btn btn-primary btn-rounded">Search<i class="flaticon-381-search-2 scale3 ms-3"></i></button>
+                    </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="row page-titles">
+                    <!-- Category -->
+                        <ol class="breadcrumb">
+                                <button type="button" class="btn" name ='category'>
+                                    <a href="{% url 'frontend:cart' table_id %}">
+                                        <strong>All</strong>
+                                    </a>
+                                </button>
+                            {% for category in categories%}
+                                
+                                <button type="button" class="btn" name ='category'>
+                                    <a href="{% url 'frontend:category' category.slug cart.id %}">
+                                        <strong class="{% if active_category.slug == category.slug %} text-primary {% endif%}">{{ category.name }}</strong>
+                                    </a>
+                                </button>
+                            {% endfor %}
+                        
+                        </ol>
+                    </div>
+                    <!-- Search Results -->
+                    {% comment %} <div style="visibility: {{no_search}}">
+                        <div style="visibility: {{found}}" >
+                            <h5>Result searched for: {{searched }}</h5><br>
+                        </div>
+                        <div style="visibility: {{not_found}}">
+                            <h5 >Result searched for: {{searched }} </h5>
+                            <h5>Not Found</h5>
+                            <br>
+                        </div>
+                    </div> {% endcomment %}
+                    <!-- Products List -->
+                    {% for product in products %}   
+                    <div class="col-xl-3 col-xxl-4 col-lg-6 col-md-12 col-sm-6 product-data">
+                        <div class="card item-card ">
+                            <div class="card-body p-0">
+                                <img src="{{ product.ImageURL }}" class="img-fluid" alt="">
+                                <div class="info">
+                                    <h4 class="name">{{ product.product_name}}</h4>
+                                    <hr>
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ cart.id }}" class="cart_id">
+                                    <input type="hidden" value="{{ product.id }}" class="prod_id">
+                                    <label for="Quantity">Quantity: </label>
+                                    {% if product.product_qty > 0 %}
+                                    <label>{{ product.product_qty }}</label><br>
+                                    <label style="color:green">Instock</label>
+                                    {% else %}
+                                    <label>0</label><br>
+                                    <label style="color:red">Out of stock</label>                   
+                                    {% endif %} 
+                                    <h4 style="margin-top:10px" class="display: inline-block; float:right ">${{ product.product_price | floatformat:2 }}</h4>
+                                </div>
+                                
+                                <div style="margin-bottom:10px; padding-left:35px">                                                     
+                                    <div class="input-group text-center mb-3" style="width:150px;">
+                                        <button class = "input-group-text decrement-btn">-</button>
+                                        <input type ='text' name="quantity" class ="form-control qty-input text-center" value='1'>
+                                        <button class = "input-group-text increment-btn">+</button>
+                                    </div>
+                                    <button style="margin-left:20px" type='button' class='btn btn-primary me-3 add-btn addToCartBn reload text-center' onClick="window.location.reload()">Add To Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% comment %} {% block additional_js %}
+<script>
+
+    
+    
+		  
+	function ItemsCarousel()
+	{
+	
+		/*  testimonial one function by = owl.carousel.js */
+		jQuery('.item-carousel').owlCarousel({
+			loop:true,
+			margin:10,
+			nav:true,
+			center:true,
+			autoWidth:true,
+			autoplay:true,
+			dots: false,
+			items:4,
+			navText: ['', ''],
+			breackpoint:[
+			
+			
+			]
+			
+		})
+	}
+	
+	jQuery(window).on('load',function(){
+		setTimeout(function(){
+			ItemsCarousel();
+		}, 1000); 
+	});
+	
+	function handleTabs(){
+		$('#add-order-content,#place-order').css("display","none");	
+		$('#add-order').on('click',function(){
+			$('#add-order-content').css("display","block");	
+			$('#home-counter').css("display","none");	
+		})
+		$('#place-order-tab').on('click',function(){
+			$('#place-order').css("display","block");	
+			$('#add-order-content').css("display","none");	
+		})
+		$('#place-order-cancel').on('click',function(){
+			$('#place-order').css("display","none");	
+			$('#add-order-content').css("display","block");	
+		})
+		$('#home-counter-tab').on('click',function(){
+			$('#home-counter').css("display","block");	
+			$('#add-order-content').css("display","none");	
+		})
+	}
+	handleTabs();
+
+	</script>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,108 @@
+{% extends 'davur/elements/layouts/admin.html' %}
+{% load static %}
+
+
+{% block additional_css %}
+{% endblock %}
+
+{% block demo-chart %}
+                
+
+
+
+
+<div style="width:500px">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
+
+    <div style="width:500px">
+        <canvas id="myChart2"></canvas>
+    </div>
+    <script>
+    var ctx = document.getElementById('myChart2');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            borderColor:'red',
+            borderWidth: 1
+        },
+        {
+            label: '# of Votes',
+            data: [47, 9, 13, 6, 8, 2],
+            borderColor:'blue',
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
+    </script>
+
+    <div class="col-sm-6" style="margin-top:50px">    
+        <canvas id="myChart1" width="300" height="200"></canvas>
+    </div>
+    <script>
+        var ctx = document.getElementById('myChart1').getContext('2d');
+        var myChart1 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for i in main_cate %} '{{ i.product_name }}', {% endfor %}],
+                datasets: [{
+                    label:'Main',
+                    data: [{% for j in main_cate %} '{{ j.buy_qty }}', {% endfor %}],
+                }]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+    </script> 
+    
+    <div class="col-sm-6" style="margin-top:100px">    
+        <canvas id="customerChartToday" width="300" height="200"></canvas>
+    <div>
+
+    <script>
+        var ctx = document.getElementById('customerChartToday').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['return_customers','new_customers'],
+                datasets: [{
+                    label:'Customers',
+                    data: [{{return_customers}},{{new_customers}}],
+                }]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+    </script>        
+
+</div>
+
+
+{% endblock demo-chart %}

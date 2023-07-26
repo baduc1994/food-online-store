@@ -1,0 +1,129 @@
+{% extends 'davur/elements/layouts/admin.html' %}
+{% load static %}
+
+
+{% block additional_css %}
+{% endblock %}
+
+
+{% block content %}
+
+        <div class="row">
+
+        
+            
+            <h2><a href="{% url 'davur:ecom-product-order' %}">Back</a></h2>
+            <br>
+        </div>
+
+        <div class="row page-titles">
+            <h3 class="text-primary">Order {{order.order_id}}</h3>
+            
+        </div>
+        
+                
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <h3>Customer: {{order.customer_name}}</h3>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in list_items %}
+                                <tr>
+                                    <td>{{ i.product_name }}</td>
+                                    <td>${{ i.product_price }}</td>
+                                    <td>{{ i.product_qty }}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <div>
+                                <label>Payment Method : </label>
+                                {{order.payment_method}}
+                            </div>
+                            {% if order.is_return == True %}
+                            <div>
+                                <label>Customer Status : Return</label>
+                                
+                            </div>
+                        
+                            {% else %}
+                            <div>
+                                <label>Customer Status : New</label>
+                               
+                            </div>
+                            {% endif %}
+                            <div>
+                            {% if order.is_return == True %}
+                                <label>Discount: 10% for return customer</label>
+                            {% endif %}
+                            </div>
+                            <div>
+                                <label>Discount : </label>
+                                {{order.discount}}%
+                            </div>
+                            <div>
+                                <label>Buy Date : </label>
+                                {{order.created_at}}
+                            </div>
+                            <div>
+                                <label>Total Items : </label>
+                                {{order.total_item}}
+                            </div><hr>
+                            <div>
+                                
+                                <strong>Total Price: {{order.total_price}}</strong>
+                            </div><hr>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div style="margin: 5px 0 50px 0" class="container">
+                <button type="button" class="btn btn-danger col-2 mx-auto " data-bs-toggle="modal" data-bs-target="#myModal{{order.id}}">Delete</button>       
+            </div>
+            <!-- The Modal -->
+            <div class="modal" id="myModal{{order.id}}">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are you sure ?</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            <a href="{% url 'davur:delete-order' order.id %}" class="btn btn-primary">Delete</a>            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+
+{% endblock %}
+
+
+
+{% block additional_js %}
+{% endblock %}
+
+
+
+
+

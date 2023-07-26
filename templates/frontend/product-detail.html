@@ -1,0 +1,328 @@
+{% extends 'frontend/elements/layouts/base.html' %}
+{% load static %}
+{% block additional_css %}
+{% endblock %}
+<head>
+<style>
+.card{border:none}
+.product{background-color: #eee}
+.brand{font-size: 13px}
+.act-price{color:red;font-weight: 700}
+.dis-price{text-decoration: line-through}
+.about{font-size: 14px}
+.color{margin-bottom:10px}
+label.radio{cursor: pointer}
+label.radio input{position: absolute;top: 0;left: 0;visibility: hidden;pointer-events: none}
+label.radio span{padding: 2px 9px;border: 2px solid #ff0000;display: inline-block;color: #ff0000;border-radius: 3px;text-transform: uppercase}
+label.radio input:checked+span{border-color: #ff0000;background-color: #ff0000;color: #fff}
+.btn-danger{background-color: #ff0000 !important;border-color: #ff0000 !important}
+.btn-danger:hover{background-color: #da0606 !important;border-color: #da0606 !important}
+.btn-danger:focus{box-shadow: none}
+.cart i{margin-right: 10px}
+
+</style>
+</head>
+{% block content %}
+<div class="container">
+            <!-- ============= COMPONENT ============== -->
+        <!--Menu-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url 'frontend:home-page' %}">Davur</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"  aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="main_nav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item active"> <a class="nav-link" href="{% url 'frontend:home-page' %}">Home </a> </li>
+                            
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">Menu</a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#"> Drinks</a></li>
+                                    <li><a class="dropdown-item" href="#"> Dessert </a></li>
+                                    <li><a class="dropdown-item" href="#"> Main </a></li>
+                                    <li><a class="dropdown-item" href="#"> Appetizer </a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#">Contact Us </a></li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto">
+                            
+                            {% if user.is_authenticated %}
+                                <li class="nav-item"><a class="nav-link" >Welcome: {{request.user}}</a></li>
+                                
+                                <li class="nav-item"><a class="nav-link" href="{% url 'frontend:cart-page'%}">Cart</a></li>
+                                <li class="nav-item dropdown">
+                                <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">My Profile</a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="{% url 'frontend:order-history'%}">Order History</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'frontend:tracking-order'%}"> Tracking Order </a></li>
+                                        <li><a class="dropdown-item" href="{% url 'frontend:logout-page' %}">Logout</a></li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'frontend:login-page' %}">Login</a>
+                                {% comment %} <a class="nav-link" href="#loginModal" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a> {% endcomment %}
+                                    
+                                <!-- The Modal -->
+                                {% comment %} <div class="modal" id="loginModal">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title">Login</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <!-- Modal body -->
+                                            <div style="background-color:#F8F9FA" class="modal-body">
+                                                <form method ="post" action=''>
+                                                {% csrf_token %}
+                                                    
+                                                    <!-- Email input -->
+                                                    <div class="form-outline mb-4">
+                                                        <input name='login-user' type="text" id="form2Example1" class="form-control" placeholder="Username"/>
+                                                    </div>
+
+                                                    <!-- Password input -->
+                                                    <div class="form-outline mb-4">
+                                                        <input name="login-pass" type="password" id="form2Example2" class="form-control" placeholder="Password"/>
+                                                    </div>
+                                                    {% for message in messages %}
+                                                        <p>{{message}}</p>
+                                                    
+                                                    {% endfor %}
+                                                    <button type='submit' class="btn btn-primary btn-block">Login</button>
+                                                </form>
+                                                
+                                                
+                                            </div>
+
+                                            <!-- Modal footer -->
+                                            {% comment %} <div class="modal-footer">
+                                                <a href="" class="btn btn-primary btn-block">Log In</a>            
+                                            </div> {% endcomment %}
+                                       {% comment %} </div>
+                                    </div>
+                                </div> {% endcomment %}
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'frontend:register' %}">Sign Up</a>
+                                <!-- The Modal -->
+                                {% comment %} <div class="modal" id="signupModal">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title">Sign Up</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <!-- Modal body -->
+                                            <div style="background-color:#F8F9FA" class="modal-body">
+                                                <form method = 'post' action =''>
+                                                {% csrf_token %}
+                                                    <!-- Name input -->
+                                                    <div class="form-outline mb-4">
+                                                        <input name="username" type="text"  class="form-control" placeholder="Username"/>
+                                                        
+                                                    </div>
+                                                    
+                                                    <!-- Email input -->
+                                                    <div class="form-outline mb-4">
+                                                        <input name="email" type="email" class="form-control" placeholder="Email address"/>
+                                                       
+                                                    </div>
+
+                                                    <!-- Password input -->
+                                                    <div class="form-outline mb-4">
+                                                        <input name="password" id="password" type="password"  class="form-control" placeholder="Password"/>
+                                                        
+                                                    </div>
+                                                    <!-- Repeat Password input -->
+                                                    <div class="form-outline mb-4">
+                                                        <input id="confirm_password" type="password"  class="form-control" placeholder="Repeat your password"/>
+                                                        <span id='message'></span>
+                                                        
+                                                    </div>
+                                                    <script>
+                                                        $('#password, #confirm_password').on('keyup', function () {
+                                                            if ($('#password').val() == $('#confirm_password').val()) {
+                                                                $('#message').html('Matching').css('color', 'green');
+                                                            } else 
+                                                                $('#message').html('Not Matching').css('color', 'red');
+                                                            });
+                                                    </script>
+                                                    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                                                </form>
+                                                
+                                                
+                                            </div>
+
+                                            <!-- Modal footer -->
+                                            {% comment %} <div class="modal-footer">
+                                                <a href="" class="btn btn-primary btn-block">Sign Up</a>        
+                                            </div> {% endcomment %}
+                                        {% comment %}</div>
+                                    </div>
+                                </div> {% endcomment %}
+                            </li>
+                            {% endif %}
+                            
+                            
+                            {% comment %} <li class="nav-item">
+                                <a class="nav-link dropdown-toggle hidden-arrow position-relative" href="#"
+                                    data-bs-toggle="dropdown">
+                                
+                                
+                                    <i class="fas fa-bell text-white "></i>
+                                    <span style="right:0" class="badge rounded-pill badge-notification bg-danger position-absolute top-0">1</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" >
+                                    <li>
+                                        <a class="dropdown-item" href="#">Some news</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">Another news</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </li>
+                                </ul>
+                            </li> {% endcomment %}
+                            
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        <!--Product-->
+        <div class="container mt-5 mb-5 product-data-onl">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="images p-3">
+                                    <div class="text-center p-4"> <img id="main-image" src="{{product.ImageURL}}" width="350" /> </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="product p-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        {% comment %} <div class="d-flex align-items-center"> <i class="fa fa-long-arrow-left"></i> <span class="ml-1">Back</span> </div> <i class="fa fa-shopping-cart text-muted"></i> {% endcomment %}
+                                        <h3><a class="text-primary" href="{% url 'frontend:home-page' %}">Back</a></h3>
+                                    </div>
+                                    <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">Product Id: {{product.product_code}}</span>
+                                        <h3 class="text-uppercase mt-2">{{product.product_name}}</h3>
+                                        <p>Category: {{product.category}}</p>
+                                        <div>
+                                            <div>
+                                                
+                                                {% if product.rating > 0 %}
+                                                <span style = "margin-top:100px" class="text-primary fs-22 font-w600">{{product.rating}}</span>
+                                                {% endif %}
+                                                <i class="fa fa-star fs-17 mx-1 {% if product.rating > 0.5 %} checked text-primary {% endif %}"></i>
+                                                <i class="fa fa-star fs-17 mx-1 {% if product.rating > 1.5 %} checked text-primary {% endif %}"></i>
+                                                <i class="fa fa-star fs-17 mx-1 {% if product.rating > 2.5 %} checked text-primary {% endif %}"></i>
+                                                <i class="fa fa-star fs-17 mx-1 {% if product.rating > 3.5 %} checked text-primary {% endif %}"></i>
+                                                <i class="fa fa-star fs-17 mx-1 {% if product.rating > 4.5 %} checked text-primary {% endif %}"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <br>
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ cart.id }}" class="cart_id">
+                                        <input type="hidden" value="{{ product.id }}" class="prod_id">
+                                        <div class="mt-2 price d-flex flex-row align-items-center">
+                                            <h4><strong class="text-danger ">${{product.product_price}}</strong></h4>
+                                            <div class="ml-2">
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="about">{{product.description}}</p>
+                                    <p>Quantity: {{product.product_qty}}</p>
+                                    {% if product.product_qty <= 0 %}
+                                    <p style="color:red">Out of stock</p>
+                                    {% endif %}
+                                    <div class="input-group text-center mb-3" style="max-width:150px">
+                                        <button style="width:40px;height:45px" class = "input-group-text decrement-btn-onl">-</button>
+                                        <input style="width:40px; height:45px" type ='text' name="quantity" class ="form-control qty-input text-center" value='1'>
+                                        <button style="width:40px; height:45px" class = "input-group-text increment-btn-onl">+</button>
+                                    </div>
+                                        
+                                        
+                                    <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4 addToCartBn-onl">Add to cart</button></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if is_bought %}
+                            <h5><a style ="margin-left:30px" class="mt-1" href ="{% url 'frontend:customer-review' product.id %}">Write a review</a></h5>
+                        
+                        {% endif %}
+                        <hr>
+
+                        {% for review in reviews %}   
+                            <div class="card-body p-0 filterDiv 5-stars">
+                                <div class="media review-box d-flex">
+                                    <div class="media-body">
+                                        <h4 class="mt-0 mb-0 text-black">{{review.customer.first_name}} {{review.customer.last_name}}</h4>
+                                        <ul class="review-meta mb-3 d-block d-sm-flex align-items-center">
+                                            <li class="me-3"><small>{{ review.time }}</small></li>
+                                        </ul>
+                                        <p class="mb-3 text-secondary">{{ review.review_content }}</p>
+                                    </div>
+                                    <div class="media-footer align-self-center">
+                                        <div class="star-review text-md-center">
+                                            <span class="text-secondary">{{ review.rating }}</span>
+                                            <i class=" fa fa-star {% if review.rating > 0 %} checked text-primary {% endif %}"></i>
+                                            <i class=" fa fa-star {% if review.rating > 1 %} checked text-primary {% endif %}"></i> 
+                                            <i class=" fa fa-star {% if review.rating > 2 %} checked text-primary {% endif %}"></i> 
+                                            <i class=" fa fa-star {% if review.rating > 3 %} checked text-primary {% endif %}"></i> 
+                                            <i class=" fa fa-star {% if review.rating > 4 %} checked text-primary {% endif %}"></i>     
+                                        </div>
+                                    </div>
+                                </div>           
+                            </div>
+                        {% endfor %}
+                        <div style= "margin-left:50px; margin-top:10px" class="pagination">
+                            <span class="step-links">
+                            
+                                {% if reviews.has_previous %}
+                                    <a href="?page=1">&laquo; First</a>
+                                    <a href="?page={{ reviews.previous_page_number }}">Previous</a>
+                                {% endif %}
+
+                                <span style="margin: 0 10px" class="current">
+                                    Page {{ reviews.number }} of {{ reviews.paginator.num_pages }}
+                                </span>
+
+                                {% if reviews.has_next %}
+                                    
+                                    <a href="?page={{ reviews.next_page_number }}">Next</a>
+                                    <a href="?page={{ reviews.paginator.num_pages }}" >Last &raquo;</a>
+                                    
+                                {% endif %}
+                        
+                            </span>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+{% endblock %}    

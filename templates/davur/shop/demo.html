@@ -1,0 +1,98 @@
+
+{% extends 'davur/elements/layouts/admin.html' %}
+{% load static %}
+
+
+{% block additional_css %}
+{% endblock %}
+
+{% block demo-chart %}
+{% comment %} <h1>Revenue :{{ revenue_total }}</h1>
+<h2>Total Order : {{total_order}}</h2>
+<h2>Total Items : {{total_items}}</h2>
+<h2>Total Cutomers : {{total_customers}}</h2>
+<h2>Total Return Cutomers : {{return_customers}}</h2>
+<h2>Total New Customers : {{new_customers}}</h2>
+
+<h2>List product order by best selling: </h2>
+{% for i in most_selling_pro %}
+    <h3>{{i.product_name}}: {{i.buy_qty}}</h3>
+
+{% endfor %} {% endcomment %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+<div class="container">
+    <div class="col-sm-6" style="margin-top:50px">    
+            <canvas id="myChart1" width="300" height="200"></canvas>
+    </div>
+    <div>    
+        <canvas id="myChart2" width="300" height="200"></canvas>
+    </div>
+</div>
+today{{today}}
+<hr>
+demo{{demo}}
+<hr>
+newdate
+{{new_date}}
+
+    <script>
+        var ctx = document.getElementById('myChart1').getContext('2d');
+        var myChart1 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for i in this_week %} '{{ i.filter_date }}', {% endfor %}],
+                datasets: [{
+                    label:'This Week (Order)',
+                    data: [{% for j in order_number %} '{{ j }}', {% endfor %}],
+                },
+                   
+                ]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+
+        var ctx = document.getElementById('myChart2').getContext('2d');
+        var myChart1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [{% for i in this_week %} '{{ i.filter_date }}', {% endfor %}],
+                datasets: [{
+                    label:'This Week: ${{total_this_week}}',
+                    data: [{% for j in revenue_this_week %} '{{ j }}', {% endfor %}],
+                },
+                    {
+                    label:'Last Week: ${{total_last_week}}',
+                    data: [{% for y in revenue_last_week %} '{{ y }}', {% endfor %}],
+                }
+                    
+                ]
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+
+
+
+    </script> 
+
+
+{% endblock %}
+
