@@ -1,0 +1,47 @@
+create database:
+- category
+- product
+- product_review
+- restaurant_review
+
+assign models to "davur/admin"
+
+show product_list:
+- edit "davur/davur_views.py/ecom-product-list"
+- edit "templates/davur/shop/ecom_product_list"
+
+filter by categories
+- edit "davur/davur_views.py" => create fitler_by_categories
+- add path in "davur/urls.py"
+- add "templates/davur/shop/product-list-by-categories"
+
+show restaurant reviews:
+- edit "davur/davur_views.py/page_review"
+- edit "templates/davur/page-review"
+
+Upload product:
+- create form.py in frontend folder
+- edit "templates/frontend/element/front - upload_item.html"
+
+
+Order product
+- edit "frontend/frontend_views.py/front-home"
+- edit "templates/frontend/element/front-home.html"
+- add "static/frontend/js/cart.js"
+- create model in davur/model/py: Cart, CartItem
+- edit "templates/frontend/elements/layouts/base.html"
+
+
+Search Product
+- add path(search/) to frontend/urls.py
+- add templates/frontend/elements/search.html
+- create "frontend/frontend_views.py/search"
+- edit "templates/frontend/element/front-home.html"
+
+
+
+
+
+
+
+
